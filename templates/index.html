@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <title>Checkerboard</title>
+</head>
+<body>
+    <h1 style="background-color: {{color_two}}; color: {{color_one}};">*** CHECKERBOARD ***</h1>
+    <table>
+        <tbody>
+            {% for i in range(0,row) %}
+                <tr>
+                    {% for x in range(0,col) %}
+                        {% if (x+i) % 2 == 0 %}
+                            <td style="background-color: {{color_one}};"></td>
+                        {% else %}
+                            <td style="background-color: {{color_two}};"></td>
+                        {%  endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+
+server.py 
+
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    return render_template("index.html",row=8,col=8,color_one='red',color_two='black')
+
+
+@app.route('/<int:x>')
+def row(x):
+    return render_template("index.html",row=x,col=8,color_one='red',color_two='black')
+
+@app.route('/<int:x>/<int:y>')
+def row_col(x,y):
+    return render_template("index.html",row=x,col=y,color_one='red',color_two='black')
+
+@app.route('/<int:x>/<int:y>/<string:one>')
+def row_col_one(x,y,one):
+    return render_template("index.html",row=x,col=y,color_one=one,color_two='black')
+
+@app.route('/<int:x>/<int:y>/<string:one>/<string:two>')
+def row_col_two(x,y,one,two):
+    return render_template("index.html",row=x,col=y,color_one=one,color_two=two)
+
+if __name__=="__main__":
+    app.run(debug=True)
